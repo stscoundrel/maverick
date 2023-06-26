@@ -2,6 +2,8 @@
 
 .NET / C# script to close software that contain social aspects in them. Ones like Discord, Steam, Slack etc.
 
+The script is build for x86 Windows, but earlier version worked well enough on Mac too.
+
 ## Build the executable
 
 `dotnet publish src -o dist`
