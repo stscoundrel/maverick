@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 
 namespace stscoundrel.Maverick;
 
@@ -6,23 +7,32 @@ internal class Maverick
 {
     public static readonly List<string> ProgramsToClose = new List<string>
     {
-        "Discord",
-        "Steam",
-        "Slack"
+        "discord",
+        "steam",
+        "slack"
     };
 
     static void Main(string[] args)
     {
         var closedPrograms = new List<String> { };
+        var failedCloses = new List<String> { };
         Process[] runningProcesses = Process.GetProcesses();
         foreach (Process process in runningProcesses)
         {
-            foreach (ProcessModule module in process.Modules)
+            foreach (String programToClose in ProgramsToClose)
             {
-                if (module.ModuleName != null && ProgramsToClose.Contains(module.ModuleName))
+                if (process.ProcessName.ToLower().Contains(programToClose))
                 {
-                    process.Kill();
-                    closedPrograms.Add(module.ModuleName);
+                    try
+                    {
+                        process.Kill();
+                        closedPrograms.Add(process.ProcessName);
+                    }
+                    catch (Win32Exception)
+                    {
+                        Console.WriteLine("Failed to close " + programToClose);
+                        failedCloses.Add(process.ProcessName);
+                    }
                 }
             }
         }
@@ -32,6 +42,17 @@ internal class Maverick
         {
             Console.WriteLine("- " + closedProgram);
         }
+
+        if (failedCloses.Count > 0)
+        {
+            Console.WriteLine("Failed to close " + failedCloses.Count + " program(s)");
+            foreach (String failedClose in failedCloses)
+            {
+                Console.WriteLine("- " + failedClose);
+            }
+        }
+
+        Console.ReadLine();
 
     }
 }
