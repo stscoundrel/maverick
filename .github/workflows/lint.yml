@@ -15,4 +15,3 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
           include-prerelease: true
       - run: dotnet format src --verify-no-changes
-      - run: dotnet format tests --verify-no-changes
