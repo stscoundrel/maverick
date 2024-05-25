@@ -9,7 +9,8 @@ internal class Maverick
     {
         "discord",
         "steam",
-        "slack"
+        "slack",
+        "skype"
     };
 
     static void Main(string[] args)
